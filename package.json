@@ -11,7 +11,7 @@
 	},
 	"keywords": ["web-component", "dark-mode", "toggle", "flashlight"],
 	"author": "",
-	"license": "ISC",
+	"license": "MIT",
 	"type": "commonjs",
 	"devDependencies": {
 		"vite": "^7.3.0"
