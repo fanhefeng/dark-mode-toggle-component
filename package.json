@@ -1,0 +1,19 @@
+{
+	"name": "dark-mode-toggle-component",
+	"version": "1.0.0",
+	"description": "A flashlight-style dark mode toggle web component",
+	"main": "dist/dark-mode-toggle.iife.js",
+	"module": "dist/dark-mode-toggle.es.js",
+  "files": ["dist"],
+	"scripts": {
+		"dev": "vite",
+		"build": "vite build"
+	},
+	"keywords": ["web-component", "dark-mode", "toggle", "flashlight"],
+	"author": "",
+	"license": "ISC",
+	"type": "commonjs",
+	"devDependencies": {
+		"vite": "^7.3.0"
+	}
+}
