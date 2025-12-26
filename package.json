@@ -1,12 +1,15 @@
 {
-	"name": "dark-mode-toggle-component",
-	"version": "1.0.1",
+	"name": "@fanhefeng/dark-mode-toggle-component",
+	"version": "1.0.0",
 	"description": "A flashlight-style dark mode toggle web component",
 	"main": "dist/dark-mode-toggle.iife.js",
 	"module": "dist/dark-mode-toggle.es.js",
 	"files": [
 		"dist"
 	],
+	"publishConfig": {
+		"access": "public"
+	},
 	"repository": "https://github.com/fanhefeng/dark-mode-toggle-component.git",
 	"scripts": {
 		"dev": "vite",

@@ -13,24 +13,18 @@ A flashlight-style dark mode toggle Web Component. Lightweight and dependency-fr
 ## Installation
 
 ```bash
-npm install dark-mode-toggle-component
+npm install @fanhefeng/dark-mode-toggle-component
 ```
 
-Or include directly via CDN/local file.
+## Usage
 
-## Quick Start
-
-### Using the built bundle (recommended)
-
-```html
-<script type="module" src="/dist/dark-mode-toggle.es.js"></script>
-<dark-mode-toggle></dark-mode-toggle>
+```js
+import '@fanhefeng/dark-mode-toggle-component'
 ```
 
-### Using IIFE bundle (for non-module environments)
+Then use the component in your HTML:
 
 ```html
-<script src="/dist/dark-mode-toggle.iife.js"></script>
 <dark-mode-toggle></dark-mode-toggle>
 ```
 
@@ -51,7 +45,7 @@ Or include directly via CDN/local file.
 
 ### Prerequisites
 
-- Node.js (v18+ recommended)
+- Node.js (v22+ recommended)
 - npm
 
 ### Setup
