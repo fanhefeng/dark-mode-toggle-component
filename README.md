@@ -1,87 +1,84 @@
-# dark-mode-toggle-component
+# Dark Mode Toggle Web Component
 
-A flashlight-style dark mode toggle Web Component. Lightweight and dependency-free at runtime, suitable for static sites or any framework.
+A flashlight-style dark mode toggle web component built with Vanilla JS. This component allows users to toggle dark mode on and off by clicking a button that animates like a flashlight. It's designed to be easy to integrate into your web projects as a custom HTML element.
+
+## Table of Contents
+
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+  - [Basic Usage](#basic-usage)
+  - [Customizing the Component](#customizing-the-component)
+- [License](#license)
 
 ## Features
 
-- Native Web Component — works with any framework or vanilla HTML
-- Flashlight effect follows cursor in dark mode
-- Zero runtime dependencies
-- Built with Vite for fast development and optimized production builds
-- Supports both ESM and IIFE bundles
+- 🌑 **Dark Mode Toggle**: Switch between dark mode and light mode with a single click.
+- 💡 **Flashlight Effect**: Adds a flashlight effect when the toggle button is clicked in dark mode.
+- 🚀 **Web Component**: Native web component, can be used in any framework or vanilla JS.
+- 🛠 **Customizable**: Easily change primary color and other properties.
+- 📦 **Lightweight**: Minimal JavaScript, only adds the functionality you need.
+- 🔧 **Vite-powered**: Built using Vite for fast bundling and hot-reloading during development.
 
 ## Installation
+
+### 1. Install via npm
+
+You can install the component via npm if you are using a package manager:
 
 ```bash
 npm install @fanhefeng/dark-mode-toggle-component
 ```
 
-## Usage
+### 2. Importing and Using the Component
 
-```js
-import '@fanhefeng/dark-mode-toggle-component'
+After installing, you can import the component and use it in your HTML.
+
+```html
+<dark-mode-toggle primary-color="#6155f5"></dark-mode-toggle>
 ```
 
-Then use the component in your HTML:
+You can optionally customize the primary color using the `primary-color` attribute. If not provided, the default color is `#6155f5`.
+
+## Usage
+
+### Basic Usage
+
+To use the `dark-mode-toggle` component, simply include the following HTML tag in your page:
 
 ```html
 <dark-mode-toggle></dark-mode-toggle>
 ```
 
-## Attributes
+This will render the toggle button with the default primary color (`#6155f5`). Clicking the button will toggle the dark mode on the page.
 
-| Attribute       | Type   | Default   | Description                          |
-| --------------- | ------ | --------- | ------------------------------------ |
-| `primary-color` | string | `#6155f5` | Accent color for the toggle glow     |
-| `dark-mode`     | flag   | —         | If present, starts in dark mode      |
+### Customizing the Component
 
-### Example with attributes
+You can customize the component by passing different attributes:
+
+- `primary-color`: Change the color of the toggle button.
+- `dark-mode`: Pre-set dark mode on page load.
+
+#### Example with Customization:
 
 ```html
-<dark-mode-toggle primary-color="#ff6b6b" dark-mode></dark-mode-toggle>
+<dark-mode-toggle
+	primary-color="#ff6347"
+	dark-mode
+></dark-mode-toggle>
 ```
 
-## Development
+This will set the toggle button color to tomato (`#ff6347`) and enable dark mode by default.
 
-### Prerequisites
+#### Dynamically Control Dark Mode:
 
-- Node.js (v22+ recommended)
-- npm
+You can also control dark mode using JavaScript by adding or removing the `dark` class on the `body` element:
 
-### Setup
-
-```bash
-# Install dependencies
-npm install
-
-# Start development server with HMR
-npm run dev
-
-# Build for production
-npm run build
+```js
+const darkModeToggle = document.querySelector("dark-mode-toggle");
+document.body.classList.toggle("dark"); // Toggles dark mode programmatically
 ```
-
-### Project Structure
-
-```
-├── src/
-│   ├── dark-mode-toggle.js   # Main component source
-│   └── assets/
-│       ├── dark_mode.svg     # Toggle icon
-│       └── flashlight.webp   # Flashlight effect image
-├── dist/                     # Built output
-├── vite.config.js            # Vite configuration
-└── package.json
-```
-
-## Browser Support
-
-Works in all modern browsers that support Web Components (Custom Elements v1, Shadow DOM).
 
 ## License
 
-MIT — see [LICENSE](./LICENSE) for details.
-
-## Contributing
-
-Issues and PRs are welcome. Please include reproduction steps and expected behavior when reporting bugs.
+MIT

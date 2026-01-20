@@ -1,9 +1,17 @@
 {
 	"name": "@fanhefeng/dark-mode-toggle-component",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "A flashlight-style dark mode toggle web component",
-	"main": "dist/dark-mode-toggle.iife.js",
-	"module": "dist/dark-mode-toggle.es.js",
+	"type": "module",
+	"main": "./dist/dark-mode-toggle.umd.js",
+	"module": "./dist/dark-mode-toggle.es.js",
+	"exports": {
+		".": {
+			"import": "./dist/dark-mode-toggle.es.js",
+			"require": "./dist/dark-mode-toggle.umd.js",
+			"browser": "./dist/dark-mode-toggle.umd.js"
+		}
+	},
 	"files": [
 		"dist"
 	],
