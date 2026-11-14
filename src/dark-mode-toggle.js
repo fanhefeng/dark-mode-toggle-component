@@ -15,15 +15,6 @@ class DarkModeToggle extends HTMLElement {
 
 		this.hasMoved = false;
 
-		// 检查是否已经存在单例实例
-		if (DarkModeToggle.instanceExists) {
-			console.warn(
-				"[dark-mode-toggle] Only one instance of this component is allowed. The new instance has been removed. Please ensure only one <dark-mode-toggle> element is used in your document."
-			);
-			this.remove();
-			return;
-		}
-		DarkModeToggle.instanceExists = true; // 设置单例标志
 
 		this.eventListeners = []; // 存储事件监听器
 	}
@@ -34,10 +25,30 @@ class DarkModeToggle extends HTMLElement {
 	}
 
 	connectedCallback() {
+		if (DarkModeToggle.instance && DarkModeToggle.instance !== this) {
+			console.warn('[dark-mode-toggle] Only one connected instance is supported.');
+			this.hidden = true;
+			return;
+		}
+		DarkModeToggle.instance = this;
+		this.hidden = false;
 		this.render();
 		this.initElements();
 		this.setupInitialState();
 		this.setupEvents();
+		this.bodyObserver = new MutationObserver(() => this.updateDarkMode(null));
+		this.bodyObserver.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+		this.updateDarkMode(null);
+	}
+
+	attributeChangedCallback(name, oldValue, newValue) {
+		if (oldValue === newValue || !this.outer || DarkModeToggle.instance !== this) return;
+		if (name === 'dark-mode') {
+			document.body.classList.toggle('dark', newValue !== null);
+			this.updateDarkMode(null);
+		} else if (name === 'primary-color') {
+			this.style.setProperty('--local-primary', newValue || '#6155f5');
+		}
 	}
 
 	// 初始化 DOM 元素
@@ -103,8 +114,8 @@ class DarkModeToggle extends HTMLElement {
 			this.flashlight.style.top = `${clientY - 250}px`;
 
 			const rect = this.inner.getBoundingClientRect();
-			const centerX = rect.left + window.scrollX + 38;
-			const centerY = rect.top + window.scrollY + 12;
+			const centerX = rect.left + rect.width / 2;
+			const centerY = rect.top + rect.height / 2;
 			const dist = Math.hypot(clientX - centerX, clientY - centerY);
 			const opacity = Math.max(0, Math.min(1, (dist - 50) / 150));
 			this.inner.style.opacity = opacity;
@@ -114,6 +125,7 @@ class DarkModeToggle extends HTMLElement {
 	// 更新暗黑模式
 	updateDarkMode(e) {
 		const dark = document.body.classList.contains("dark");
+		this.outer?.setAttribute("aria-pressed", String(dark));
 		if (dark) {
 			if (e) this.updateFlashlight(e);
 			this.addMoveListeners();
@@ -139,18 +151,22 @@ class DarkModeToggle extends HTMLElement {
 
 	// 渲染组件
 	render() {
-		const primary = this.getAttribute("primary-color") || "#6155f5";
+		this.shadowRoot.replaceChildren();
+		this.style.setProperty("--local-primary", this.getAttribute("primary-color") || "#6155f5");
 
 		// 3. 动态样式 ------------------------------------------------
 		const style = document.createElement("style");
 		style.textContent = `
-      :host{ --local-primary:${primary}; }
+      :host{ display:inline-block; }
+      :host([hidden]){ display:none; }
       .outer{
-        display:flex; opacity:.3; width:26px; height:26px; border-radius:50%;
-        background-image:url("${iconSvg}"); background-size:52px 52px; background-position:0 0;
+        display:flex; opacity:.65; width:44px; height:44px; padding:9px; border:0; border-radius:50%; background-color:transparent;
+        background-image:url("${iconSvg}"); background-size:52px 52px; background-position:0 0; background-repeat:no-repeat; background-origin:content-box; background-clip:content-box;
         transition:background-position-x .1s; cursor:pointer; position:relative;
       }
       .outer:hover{ opacity:1; }
+      .outer:focus-visible{ opacity:1; outline:2px solid var(--local-primary); outline-offset:3px; }
+      @media (prefers-reduced-motion: reduce){ .outer,.flashlight{transition:none !important} .flashlight{display:none !important} }
       .inner{
         width:26px; height:26px; border-radius:50%; cursor:pointer;
         background-image:url("${iconSvg}"); background-size:52px 52px; background-position:-26px -26px;
@@ -173,7 +189,10 @@ class DarkModeToggle extends HTMLElement {
 		// 4. 结构 ----------------------------------------------------
 		this.shadowRoot.append(style);
 
-		const outerDiv = document.createElement("div");
+		const outerDiv = document.createElement("button");
+		outerDiv.type = "button";
+		outerDiv.setAttribute("aria-label", this.getAttribute("aria-label") || "Dark mode");
+		outerDiv.setAttribute("aria-pressed", "false");
 		outerDiv.classList.add("outer");
 		const innerDiv = document.createElement("div");
 		innerDiv.classList.add("inner");
@@ -181,7 +200,8 @@ class DarkModeToggle extends HTMLElement {
 		const flashlightImg = document.createElement("img");
 		flashlightImg.classList.add("flashlight");
 		flashlightImg.src = flashlightWebp;
-		flashlightImg.alt = "flashlight";
+		flashlightImg.alt = "";
+		flashlightImg.setAttribute("aria-hidden", "true");
 
 		outerDiv.appendChild(innerDiv);
 		this.shadowRoot.appendChild(outerDiv);
@@ -194,7 +214,8 @@ class DarkModeToggle extends HTMLElement {
 		this.removeEventListeners();
 
 		// 清除单例标志
-		DarkModeToggle.instanceExists = false;
+		if (DarkModeToggle.instance === this) DarkModeToggle.instance = null;
+		this.bodyObserver?.disconnect();
 
 		// 移除全局事件监听器
 		this.removeMoveListeners();
